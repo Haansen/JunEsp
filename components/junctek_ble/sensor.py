@@ -12,13 +12,13 @@ from esphome.const import (
 CODEOWNERS = ["@yourgithub"]
 DEPENDENCIES = ["ble_client"]
 
-CONF_BLE_CLIENT_ID = "ble_client_id"
+CONF_COMPONENT_ID = "id"
 
 junctek_ns = cg.esphome_ns.namespace("junctek_ble")
 JunctekBLEClient = junctek_ns.class_("JunctekBLEClient", cg.Component, ble_client.BLEClientNode)
 
 CONFIG_SCHEMA = cv.Schema({
-    cv.GenerateID(): cv.declare_id(JunctekBLEClient),
+    cv.Required(CONF_COMPONENT_ID): cv.declare_id(JunctekBLEClient),
     cv.Required(CONF_ID): cv.use_id(ble_client.BLEClient),
     cv.Required(CONF_VOLTAGE): sensor.sensor_schema(
         unit_of_measurement=UNIT_VOLT,
@@ -29,9 +29,8 @@ CONFIG_SCHEMA = cv.Schema({
 }).extend(cv.COMPONENT_SCHEMA)
 
 def to_code(config):
-    var = cg.new_Pvariable(config[cv.GenerateID()])
+    var = cg.new_Pvariable(config[CONF_COMPONENT_ID])
     yield cg.register_component(var, config)
     yield ble_client.register_ble_node(var, config[CONF_ID])
-
-    voltage = yield sensor.new_sensor(config[CONF_VOLTAGE])
-    cg.add(var.set_voltage_sensor(voltage))
+    sens = yield sensor.new_sensor(config[CONF_VOLTAGE])
+    cg.add(var.set_voltage_sensor(sens))
