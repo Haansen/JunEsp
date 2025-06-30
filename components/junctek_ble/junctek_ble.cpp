@@ -51,7 +51,7 @@ uint8_t crc(const uint8_t data[], const uint16_t len) {
   return crc;
 }
 
-void JkBmsBle::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
+void JunctekBle::dump_config() {  // NOLINT(google-readability-function-size,readability-function-size)
   ESP_LOGCONFIG(TAG, "JkBmsBle");
   LOG_BINARY_SENSOR("", "Balancing", this->balancing_binary_sensor_);
   LOG_BINARY_SENSOR("", "Precharging", this->precharging_binary_sensor_);
@@ -152,7 +152,7 @@ void JkBmsBle::dump_config() {  // NOLINT(google-readability-function-size,reada
   LOG_TEXT_SENSOR("", "Total Runtime Formatted", this->total_runtime_formatted_text_sensor_);
 }
 
-void JkBmsBle::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t gattc_if,
+void JunctekBle::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t gattc_if,
                                    esp_ble_gattc_cb_param_t *param) {
   switch (event) {
     case ESP_GATTC_OPEN_EVT: {
@@ -177,9 +177,9 @@ void JkBmsBle::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t gat
       break;
     }
     case ESP_GATTC_SEARCH_CMPL_EVT: {
-      auto *chr = this->parent_->get_characteristic(JK_BMS_SERVICE_UUID, JK_BMS_CHARACTERISTIC_UUID);
+      auto *chr = this->parent_->get_characteristic(JUNCTEK_SERVICE_UUID, JUNCTEK_CHARACTERISTIC_UUID);
       if (chr == nullptr) {
-        ESP_LOGE(TAG, "[%s] No control service found at device, not an JK BMS..?",
+        ESP_LOGE(TAG, "[%s] No control service found at device, not an Junctek Monitor..?",
                  this->parent_->address_str().c_str());
         break;
       }
@@ -264,7 +264,7 @@ void JkBmsBle::gattc_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t gat
   }
 }
 
-void JkBmsBle::update() {
+void JunctekBle::update() {
   this->track_online_status_();
   if (this->node_state != espbt::ClientState::ESTABLISHED) {
     ESP_LOGW(TAG, "[%s] Not connected", this->parent_->address_str().c_str());
@@ -278,7 +278,7 @@ void JkBmsBle::update() {
 }
 
 // TODO: There is no need to assemble frames if the MTU can be increased to > 320 bytes
-void JkBmsBle::assemble(const uint8_t *data, uint16_t length) {
+void JunctekBle::assemble(const uint8_t *data, uint16_t length) {
   if (this->frame_buffer_.size() > MAX_RESPONSE_SIZE) {
     ESP_LOGW(TAG, "Frame dropped because of invalid length");
     this->frame_buffer_.clear();
@@ -311,7 +311,7 @@ void JkBmsBle::assemble(const uint8_t *data, uint16_t length) {
   }
 }
 
-void JkBmsBle::decode_(const std::vector<uint8_t> &data) {
+void JunctekBle::decode_(const std::vector<uint8_t> &data) {
   this->reset_online_status_tracker_();
 
   uint8_t frame_type = data[4];
@@ -338,7 +338,7 @@ void JkBmsBle::decode_(const std::vector<uint8_t> &data) {
   }
 }
 
-void JkBmsBle::decode_jk02_cell_info_(const std::vector<uint8_t> &data) {
+void JunctekBle::decode_jk02_cell_info_(const std::vector<uint8_t> &data) {
   auto jk_get_16bit = [&](size_t i) -> uint16_t { return (uint16_t(data[i + 1]) << 8) | (uint16_t(data[i + 0]) << 0); };
   auto jk_get_32bit = [&](size_t i) -> uint32_t {
     return (uint32_t(jk_get_16bit(i + 2)) << 16) | (uint32_t(jk_get_16bit(i + 0)) << 0);
@@ -653,7 +653,7 @@ void JkBmsBle::decode_jk02_cell_info_(const std::vector<uint8_t> &data) {
   this->status_notification_received_ = true;
 }
 
-void JkBmsBle::decode_jk04_cell_info_(const std::vector<uint8_t> &data) {
+void JunctekBle::decode_jk04_cell_info_(const std::vector<uint8_t> &data) {
   auto jk_get_16bit = [&](size_t i) -> uint16_t { return (uint16_t(data[i + 1]) << 8) | (uint16_t(data[i + 0]) << 0); };
   auto jk_get_32bit = [&](size_t i) -> uint32_t {
     return (uint32_t(jk_get_16bit(i + 2)) << 16) | (uint32_t(jk_get_16bit(i + 0)) << 0);
@@ -843,7 +843,7 @@ void JkBmsBle::decode_jk04_cell_info_(const std::vector<uint8_t> &data) {
   status_notification_received_ = true;
 }
 
-void JkBmsBle::decode_jk02_settings_(const std::vector<uint8_t> &data) {
+void JunctekBle::decode_jk02_settings_(const std::vector<uint8_t> &data) {
   auto jk_get_16bit = [&](size_t i) -> uint16_t { return (uint16_t(data[i + 1]) << 8) | (uint16_t(data[i + 0]) << 0); };
   auto jk_get_32bit = [&](size_t i) -> uint32_t {
     return (uint32_t(jk_get_16bit(i + 2)) << 16) | (uint32_t(jk_get_16bit(i + 0)) << 0);
@@ -1117,7 +1117,7 @@ void JkBmsBle::decode_jk02_settings_(const std::vector<uint8_t> &data) {
   }
 }
 
-void JkBmsBle::decode_jk04_settings_(const std::vector<uint8_t> &data) {
+void JunctekBle::decode_jk04_settings_(const std::vector<uint8_t> &data) {
   auto jk_get_16bit = [&](size_t i) -> uint16_t { return (uint16_t(data[i + 1]) << 8) | (uint16_t(data[i + 0]) << 0); };
   auto jk_get_32bit = [&](size_t i) -> uint32_t {
     return (uint32_t(jk_get_16bit(i + 2)) << 16) | (uint32_t(jk_get_16bit(i + 0)) << 0);
@@ -1208,7 +1208,7 @@ void JkBmsBle::decode_jk04_settings_(const std::vector<uint8_t> &data) {
   // 298   2   0x00 0xCE
 }
 
-void JkBmsBle::decode_device_info_(const std::vector<uint8_t> &data) {
+void JunctekBle::decode_device_info_(const std::vector<uint8_t> &data) {
   auto jk_get_16bit = [&](size_t i) -> uint16_t { return (uint16_t(data[i + 1]) << 8) | (uint16_t(data[i + 0]) << 0); };
   auto jk_get_32bit = [&](size_t i) -> uint32_t {
     return (uint32_t(jk_get_16bit(i + 2)) << 16) | (uint32_t(jk_get_16bit(i + 0)) << 0);
@@ -1518,7 +1518,7 @@ bool JkBmsBle::write_register(uint8_t address, uint32_t value, uint8_t length) {
   return (status == 0);
 }
 
-void JkBmsBle::track_online_status_() {
+void JunctekBle::track_online_status_() {
   if (this->no_response_count_ < MAX_NO_RESPONSE_COUNT) {
     this->no_response_count_++;
   }
@@ -1528,12 +1528,12 @@ void JkBmsBle::track_online_status_() {
   }
 }
 
-void JkBmsBle::reset_online_status_tracker_() {
+void JunctekBle::reset_online_status_tracker_() {
   this->no_response_count_ = 0;
   this->publish_state_(this->online_status_binary_sensor_, true);
 }
 
-void JkBmsBle::publish_device_unavailable_() {
+void JunctekBle::publish_device_unavailable_() {
   this->publish_state_(this->online_status_binary_sensor_, false);
   this->publish_state_(this->errors_text_sensor_, "Offline");
 
@@ -1569,35 +1569,35 @@ void JkBmsBle::publish_device_unavailable_() {
   }
 }
 
-void JkBmsBle::publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state) {
+void JunctekBle::publish_state_(binary_sensor::BinarySensor *binary_sensor, const bool &state) {
   if (binary_sensor == nullptr)
     return;
 
   binary_sensor->publish_state(state);
 }
 
-void JkBmsBle::publish_state_(number::Number *number, float value) {
+void JunctekBle::publish_state_(number::Number *number, float value) {
   if (number == nullptr)
     return;
 
   number->publish_state(value);
 }
 
-void JkBmsBle::publish_state_(sensor::Sensor *sensor, float value) {
+void JunctekBle::publish_state_(sensor::Sensor *sensor, float value) {
   if (sensor == nullptr)
     return;
 
   sensor->publish_state(value);
 }
 
-void JkBmsBle::publish_state_(switch_::Switch *obj, const bool &state) {
+void JunctekBle::publish_state_(switch_::Switch *obj, const bool &state) {
   if (obj == nullptr)
     return;
 
   obj->publish_state(state);
 }
 
-void JkBmsBle::publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state) {
+void JunctekBle::publish_state_(text_sensor::TextSensor *text_sensor, const std::string &state) {
   if (text_sensor == nullptr)
     return;
 
