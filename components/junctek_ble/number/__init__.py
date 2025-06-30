@@ -17,11 +17,11 @@ from esphome.const import (
     UNIT_VOLT,
 )
 
-from .. import CONF_JK_BMS_BLE_ID, JK_BMS_BLE_COMPONENT_SCHEMA, jk_bms_ble_ns
+from .. import CONF_JUNCTEK_BLE_ID, JUNCTEK_BLE_COMPONENT_SCHEMA, junctek_bms_ble_ns
 
-DEPENDENCIES = ["jk_bms_ble"]
+DEPENDENCIES = ["junctek_ble"]
 
-CODEOWNERS = ["@syssi", "@txubelaxu"]
+CODEOWNERS = ["@Haansen"]
 
 DEFAULT_STEP = 1
 
@@ -290,11 +290,11 @@ NUMBERS = {
     ],
 }
 
-JkNumber = jk_bms_ble_ns.class_("JkNumber", number.Number, cg.Component)
+JunctekNumber = jk_bms_ble_ns.class_("JunctekNumber", number.Number, cg.Component)
 
-JK_NUMBER_SCHEMA = (
+JUNCTEK_NUMBER_SCHEMA = (
     number.number_schema(
-        JkNumber,
+        JunctekNumber,
         icon=ICON_EMPTY,
         entity_category=ENTITY_CATEGORY_CONFIG,
         unit_of_measurement=UNIT_VOLT,
@@ -310,79 +310,79 @@ JK_NUMBER_SCHEMA = (
     .extend(cv.COMPONENT_SCHEMA)
 )
 
-CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
+CONFIG_SCHEMA = JUNCTEK_BLE_COMPONENT_SCHEMA.extend(
     {
-        cv.Optional(CONF_SMART_SLEEP_VOLTAGE): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_SMART_SLEEP_VOLTAGE): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0.003): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=3.650): cv.float_,
                 cv.Optional(CONF_STEP, default=0.001): cv.float_,
             }
         ),
-        cv.Optional(CONF_CELL_VOLTAGE_OVERVOLTAGE_PROTECTION): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_VOLTAGE_OVERVOLTAGE_PROTECTION): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=1.2): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=4.350): cv.float_,
                 cv.Optional(CONF_STEP, default=0.001): cv.float_,
             }
         ),
-        cv.Optional(CONF_CELL_VOLTAGE_OVERVOLTAGE_RECOVERY): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_VOLTAGE_OVERVOLTAGE_RECOVERY): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=1.2): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=4.350): cv.float_,
                 cv.Optional(CONF_STEP, default=0.001): cv.float_,
             }
         ),
-        cv.Optional(CONF_CELL_VOLTAGE_UNDERVOLTAGE_RECOVERY): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_VOLTAGE_UNDERVOLTAGE_RECOVERY): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=1.2): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=4.350): cv.float_,
                 cv.Optional(CONF_STEP, default=0.001): cv.float_,
             }
         ),
-        cv.Optional(CONF_CELL_VOLTAGE_UNDERVOLTAGE_PROTECTION): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_VOLTAGE_UNDERVOLTAGE_PROTECTION): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=1.2): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=4.350): cv.float_,
                 cv.Optional(CONF_STEP, default=0.001): cv.float_,
             }
         ),
-        cv.Optional(CONF_BALANCE_TRIGGER_VOLTAGE): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_BALANCE_TRIGGER_VOLTAGE): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0.003): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=1.0): cv.float_,
                 cv.Optional(CONF_STEP, default=0.001): cv.float_,
             }
         ),
-        cv.Optional(CONF_CELL_SOC100_VOLTAGE): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_SOC100_VOLTAGE): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0.003): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=3.650): cv.float_,
                 cv.Optional(CONF_STEP, default=0.001): cv.float_,
             }
         ),
-        cv.Optional(CONF_CELL_SOC0_VOLTAGE): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_SOC0_VOLTAGE): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0.003): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=3.650): cv.float_,
                 cv.Optional(CONF_STEP, default=0.001): cv.float_,
             }
         ),
-        cv.Optional(CONF_CELL_REQUEST_CHARGE_VOLTAGE): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_REQUEST_CHARGE_VOLTAGE): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0.003): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=3.650): cv.float_,
                 cv.Optional(CONF_STEP, default=0.001): cv.float_,
             }
         ),
-        cv.Optional(CONF_CELL_REQUEST_FLOAT_VOLTAGE): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_REQUEST_FLOAT_VOLTAGE): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0.003): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=3.650): cv.float_,
                 cv.Optional(CONF_STEP, default=0.001): cv.float_,
             }
         ),
-        cv.Optional(CONF_CELL_REQUEST_CHARGE_VOLTAGE_TIME): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_REQUEST_CHARGE_VOLTAGE_TIME): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=25.5): cv.float_,
@@ -392,7 +392,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_CELL_REQUEST_FLOAT_VOLTAGE_TIME): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_REQUEST_FLOAT_VOLTAGE_TIME): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=25.5): cv.float_,
@@ -402,7 +402,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_CELL_COUNT): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CELL_COUNT): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=2): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=24): cv.float_,
@@ -412,7 +412,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_TOTAL_BATTERY_CAPACITY): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_TOTAL_BATTERY_CAPACITY): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=5): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=2000): cv.float_,
@@ -422,21 +422,21 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_BALANCE_STARTING_VOLTAGE): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_BALANCE_STARTING_VOLTAGE): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=1.20): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=4.25): cv.float_,
                 cv.Optional(CONF_STEP, default=0.01): cv.float_,
             }
         ),
-        cv.Optional(CONF_VOLTAGE_CALIBRATION): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_VOLTAGE_CALIBRATION): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=1.0): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=200.0): cv.float_,
                 cv.Optional(CONF_STEP, default=0.01): cv.float_,
             }
         ),
-        cv.Optional(CONF_CURRENT_CALIBRATION): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CURRENT_CALIBRATION): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0.0): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=1000.0): cv.float_,
@@ -446,14 +446,14 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_POWER_OFF_VOLTAGE): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_POWER_OFF_VOLTAGE): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=1.20): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=4.35): cv.float_,
                 cv.Optional(CONF_STEP, default=0.01): cv.float_,
             }
         ),
-        cv.Optional(CONF_MAX_BALANCE_CURRENT): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_MAX_BALANCE_CURRENT): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0.3): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=10.0): cv.float_,
@@ -463,7 +463,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_MAX_CHARGE_CURRENT): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_MAX_CHARGE_CURRENT): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=1.0): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=600.1): cv.float_,
@@ -473,7 +473,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_MAX_DISCHARGE_CURRENT): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_MAX_DISCHARGE_CURRENT): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=1.0): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=600.1): cv.float_,
@@ -483,7 +483,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_CHARGE_OVERCURRENT_PROTECTION_DELAY): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CHARGE_OVERCURRENT_PROTECTION_DELAY): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=2): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=600): cv.float_,
@@ -495,7 +495,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
         ),
         cv.Optional(
             CONF_CHARGE_OVERCURRENT_PROTECTION_RECOVERY_TIME
-        ): JK_NUMBER_SCHEMA.extend(
+        ): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=2): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=600): cv.float_,
@@ -507,7 +507,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
         ),
         cv.Optional(
             CONF_DISCHARGE_OVERCURRENT_PROTECTION_DELAY
-        ): JK_NUMBER_SCHEMA.extend(
+        ): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=2): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=600): cv.float_,
@@ -519,7 +519,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
         ),
         cv.Optional(
             CONF_DISCHARGE_OVERCURRENT_PROTECTION_RECOVERY_TIME
-        ): JK_NUMBER_SCHEMA.extend(
+        ): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=2): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=600): cv.float_,
@@ -529,7 +529,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_SHORT_CIRCUIT_PROTECTION_DELAY): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_SHORT_CIRCUIT_PROTECTION_DELAY): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=0): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=10000000): cv.float_,
@@ -541,7 +541,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
         ),
         cv.Optional(
             CONF_SHORT_CIRCUIT_PROTECTION_RECOVERY_TIME
-        ): JK_NUMBER_SCHEMA.extend(
+        ): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=2): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=600): cv.float_,
@@ -551,7 +551,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_CHARGE_OVERTEMPERATURE_PROTECTION): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CHARGE_OVERTEMPERATURE_PROTECTION): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=30): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=80): cv.float_,
@@ -563,7 +563,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
         ),
         cv.Optional(
             CONF_CHARGE_OVERTMPERATURE_PROTECTION_RECOVERY
-        ): JK_NUMBER_SCHEMA.extend(
+        ): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=30): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=80): cv.float_,
@@ -573,7 +573,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_DISCHARGE_OVERTEMPERATURE_PROTECTION): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_DISCHARGE_OVERTEMPERATURE_PROTECTION): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=30): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=80): cv.float_,
@@ -585,7 +585,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
         ),
         cv.Optional(
             CONF_DISCHARGE_OVERTEMPERATURE_PROTECTION_RECOVERY
-        ): JK_NUMBER_SCHEMA.extend(
+        ): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=30): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=80): cv.float_,
@@ -595,7 +595,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
                 ): cv.string_strict,
             }
         ),
-        cv.Optional(CONF_CHARGE_UNDERTEMPERATURE_PROTECTION): JK_NUMBER_SCHEMA.extend(
+        cv.Optional(CONF_CHARGE_UNDERTEMPERATURE_PROTECTION): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=-30): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=20): cv.float_,
@@ -607,7 +607,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
         ),
         cv.Optional(
             CONF_CHARGE_UNDERTMPERATURE_PROTECTION_RECOVERY
-        ): JK_NUMBER_SCHEMA.extend(
+        ): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=-30): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=20): cv.float_,
@@ -619,7 +619,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
         ),
         cv.Optional(
             CONF_POWER_TUBE_OVERTEMPERATURE_PROTECTION
-        ): JK_NUMBER_SCHEMA.extend(
+        ): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=30): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=100): cv.float_,
@@ -631,7 +631,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
         ),
         cv.Optional(
             CONF_POWER_TUBE_OVERTEMPERATURE_PROTECTION_RECOVERY
-        ): JK_NUMBER_SCHEMA.extend(
+        ): JUNCTEK_NUMBER_SCHEMA.extend(
             {
                 cv.Optional(CONF_MIN_VALUE, default=30): cv.float_,
                 cv.Optional(CONF_MAX_VALUE, default=100): cv.float_,
@@ -646,7 +646,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
 
 
 async def to_code(config):
-    hub = await cg.get_variable(config[CONF_JK_BMS_BLE_ID])
+    hub = await cg.get_variable(config[CONF_JUNCTEK_BLE_ID])
     for key, address in NUMBERS.items():
         if key in config:
             conf = config[key]

@@ -23,10 +23,10 @@ from esphome.const import (
     UNIT_WATT,
 )
 
-from . import CONF_JK_BMS_BLE_ID, JK_BMS_BLE_COMPONENT_SCHEMA
+from . import CONF_JUNCTEK_BLE_ID, JUNCTEK_BLE_COMPONENT_SCHEMA
 from .const import CONF_BALANCING
 
-CODEOWNERS = ["@syssi", "@txubelaxu"]
+CODEOWNERS = ["@Haansen"]
 
 CONF_MIN_CELL_VOLTAGE = "min_cell_voltage"
 CONF_MAX_CELL_VOLTAGE = "max_cell_voltage"
@@ -246,7 +246,7 @@ SENSORS = [
 ]
 
 # pylint: disable=too-many-function-args
-CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
+CONFIG_SCHEMA = JUNCTEK_BLE_COMPONENT_SCHEMA.extend(
     {
         cv.Optional(CONF_BALANCING): sensor.sensor_schema(
             unit_of_measurement=UNIT_EMPTY,
@@ -907,7 +907,7 @@ CONFIG_SCHEMA = JK_BMS_BLE_COMPONENT_SCHEMA.extend(
 
 
 async def to_code(config):
-    hub = await cg.get_variable(config[CONF_JK_BMS_BLE_ID])
+    hub = await cg.get_variable(config[CONF_JUNCTEK_BLE_ID])
     for i, key in enumerate(CELL_VOLTAGES):
         if key in config:
             conf = config[key]

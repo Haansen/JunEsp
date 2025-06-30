@@ -1,12 +1,12 @@
-#include "jk_bms_ble.h"
+#include "junctek_ble.h"
 #include "esphome/core/log.h"
 
 #ifdef USE_ESP32
 
 namespace esphome {
-namespace jk_bms_ble {
+namespace junctek_ble {
 
-static const char *const TAG = "jk_bms_ble";
+static const char *const TAG = "junctek_ble";
 
 static const uint8_t MAX_NO_RESPONSE_COUNT = 10;
 
